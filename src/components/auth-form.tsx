@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
@@ -24,7 +24,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
     }
   }, [mode, searchParams]);
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: ChangeEvent<HTMLFormElement>) {
     event.preventDefault();
     if (password.length < 8) {
       toast.error("পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।");
@@ -47,14 +47,13 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           toast.error(result.error.message || "অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন।");
           return;
         }
-        // Better Auth can create a session after sign-up. This flow explicitly asks
-        // the user to sign in next, so end that session before opening the login page.
+        
         await authClient.signOut();
         toast.success("অ্যাকাউন্ট তৈরি হয়েছে। এখন সাইন ইন করুন।");
         router.push("/signin");
       }
     } catch {
-      toast.error("একটি সমস্যা হয়েছে। আপনার সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।");
+      toast.error("Error! আপনার সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।");
     } finally {
       setSubmitting(false);
     }
