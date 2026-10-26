@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-import { authClient } from "@/lib/auth-client";
+import { authClient, signIn } from "@/lib/auth-client";
 
 type AuthMode = "signin" | "signup";
 type SocialProvider = "google" | "github";
@@ -20,7 +20,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
   useEffect(() => {
     if (mode === "signin" && searchParams.get("notice") === "login-required") {
-      toast("পণ্যের বিস্তারিত দেখতে আগে সাইন ইন করুন।", { icon: "🔐" });
+      toast("পণ্যের বিস্তারিত দেখতে আগে সাইন ইন করুন।",);
     }
   }, [mode, searchParams]);
 
@@ -65,13 +65,26 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
       const result = await authClient.signIn.social({ provider, callbackURL: "/" });
       if (result.error) toast.error(result.error.message || `${provider} দিয়ে সাইন ইন করা যায়নি।`);
     } catch {
-      toast.error("সোশ্যাল সাইন ইন শুরু করা যায়নি। OAuth সেটিংস পরীক্ষা করুন।");
+      toast.error("সোশ্যাল সাইন ইন শুরু করা যায়নি।");
     } finally {
       setSocialLoading(null);
     }
   }
 
   const isSignIn = mode === "signin";
+
+ const handleGoogleSignIn = async()=>{
+        const resData = await signIn.social({
+            provider: 'google'
+        })
+        console.log('after google sign in', resData)
+    }
+const handleGithubSignIn =async()=>{
+        const resData = await signIn.social({
+            provider: 'github'
+        })
+        console.log('after github sign in', resData)
+    }
 
   return (
     <main className="auth-layout">
@@ -92,15 +105,18 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         <div className="auth-form-box">
           <div className="auth-form-heading"><span className="auth-icon-circle">{isSignIn ? "↗" : "✳"}</span><p className="section-eyebrow">{isSignIn ? "আবার স্বাগতম" : "আজই শুরু করুন"}</p><h2>{isSignIn ? "আপনার অ্যাকাউন্টে সাইন ইন করুন" : "নতুন অ্যাকাউন্ট তৈরি করুন"}</h2><p>{isSignIn ? "আপনার বাজারদর ও পছন্দের তথ্য দেখতে সাইন ইন করুন।" : "বাজারের তথ্য পেতে কয়েক মুহূর্তে অ্যাকাউন্ট তৈরি করুন।"}</p></div>
           <form className="auth-form" onSubmit={onSubmit}>
-            {!isSignIn ? <label className="form-field"><span>আপনার নাম</span><input type="text" name="name" placeholder="যেমন: সাইম ভুঁইয়া" autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} required minLength={2} /></label> : null}
-            <label className="form-field"><span>ইমেইল ঠিকানা</span><input type="email" name="email" placeholder="name@example.com" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></label>
+            {!isSignIn ? <label className="form-field"><span>আপনার নাম</span><input type="text" name="name" placeholder="আপনার নাম লিখুন" autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} required minLength={2} /></label> : null}
+            <label className="form-field">
+              <span>ইমেইল ঠিকানা</span>
+              <input type="email" name="email" placeholder="name@example.com" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
+              </label>
             <label className="form-field"><span>পাসওয়ার্ড</span><input type="password" name="password" placeholder="কমপক্ষে ৮ অক্ষর" autoComplete={isSignIn ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} required minLength={8} /></label>
-            <button className="button button-primary auth-submit" type="submit" disabled={submitting}>{submitting ? <><span className="button-spinner" /> প্রক্রিয়াধীন...</> : isSignIn ? "সাইন ইন করুন ↗" : "অ্যাকাউন্ট তৈরি করুন ↗"}</button>
+            <button className="button button-primary auth-submit" type="submit" disabled={submitting}>{submitting ? <><span className="button-spinner" /> প্রক্রিয়াধীন...</> : isSignIn ? "সাইন ইন করুন" : "অ্যাকাউন্ট তৈরি করুন"}</button>
           </form>
           <div className="auth-divider"><span />অথবা<span /></div>
           <div className="social-login-grid">
-            <button type="button" className="social-login-button" onClick={() => onSocialSignIn("google")} disabled={socialLoading !== null}><span className="google-mark">G</span>{socialLoading === "google" ? "সংযোগ হচ্ছে..." : "Google"}</button>
-            <button type="button" className="social-login-button" onClick={() => onSocialSignIn("github")} disabled={socialLoading !== null}><span className="github-mark">⌘</span>{socialLoading === "github" ? "সংযোগ হচ্ছে..." : "GitHub"}</button>
+            <button type="button" className="social-login-button" onClick={() => onSocialSignIn("google")}><span className="google-mark">G</span>{socialLoading === "google" ? "সংযোগ হচ্ছে..." : "Google"}</button>
+            <button type="button" className="social-login-button" onClick={() => onSocialSignIn("github")} disabled={socialLoading !== null}><span className="github-mark">Git</span>{socialLoading === "github" ? "সংযোগ হচ্ছে..." : "GitHub"}</button>
           </div>
           <p className="auth-switch-text">{isSignIn ? "আপনার অ্যাকাউন্ট নেই?" : "আগেই অ্যাকাউন্ট আছে?"} <Link href={isSignIn ? "/signup" : "/signin"}>{isSignIn ? "সাইন আপ করুন" : "সাইন ইন করুন"}</Link></p>
           <p className="auth-terms">চালিয়ে যাওয়ার মাধ্যমে আপনি আমাদের ব্যবহারবিধিতে সম্মত হচ্ছেন।</p>
