@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 import { getBanglaDate } from "@/lib/format";
 import type { Category, Product } from "@/lib/types";
+import Image from "next/image";
 
 const FALLBACK_CATEGORIES: Category[] = [
   { id: "chal", slug: "chal", name: "চাল", emoji: "🍚" },
@@ -76,7 +77,8 @@ export function Navbar() {
     <header className="site-header">
       <div className="container header-top">
         <Link href="/" className="brand" aria-label="বাজার দর হোম পেজ">
-          <span className="brand-mark" aria-hidden="true">🛒</span>
+          <span className="brand-mark" aria-hidden="true"><Image src="/logo-icon.png" alt="logo-image" width={20}
+        height={20}></Image></span>
           <span className="brand-copy">
             <span className="brand-name">বাজার দর<span className="brand-dot">।</span></span>
             <span className="brand-date">{dateLabel}</span>
@@ -94,7 +96,7 @@ export function Navbar() {
           ) : (
             <>
               <Link className="button button-outline button-small" href="/signin">সাইন ইন</Link>
-              <Link className="button button-primary button-small" href="/signup">সাইন আপ <span aria-hidden="true">↗</span></Link>
+              <Link className="button button-primary button-small" href="/signup">সাইন আপ <span aria-hidden="true"></span></Link>
             </>
           )}
         </div>
@@ -111,7 +113,7 @@ export function Navbar() {
             return <Link key={category.id || category.slug} href={`/category/${category.slug}`} onClick={() => setMobileMenuOpen(false)} className={`nav-link ${active ? "nav-link-active" : ""}`}>{category.emoji} {category.name}</Link>;
           })}
           <div className="mobile-auth-nav">
-            {session?.user ? <><Link href="/profile" onClick={() => setMobileMenuOpen(false)} className="button button-outline">আমার প্রোফাইল</Link><button type="button" className="button button-primary" onClick={handleSignOut}>সাইন আউট</button></> : <><Link href="/signin" onClick={() => setMobileMenuOpen(false)} className="button button-outline">সাইন ইন</Link><Link href="/signup" onClick={() => setMobileMenuOpen(false)} className="button button-primary">সাইন আপ ↗</Link></>}
+            {session?.user ? <><Link href="/profile" onClick={() => setMobileMenuOpen(false)} className="button button-outline">আমার প্রোফাইল</Link><button type="button" className="button button-primary" onClick={handleSignOut}>সাইন আউট</button></> : <><Link href="/signin" onClick={() => setMobileMenuOpen(false)} className="button button-outline">সাইন ইন</Link><Link href="/signup" onClick={() => setMobileMenuOpen(false)} className="button button-primary">সাইন আপ</Link></>}
           </div>
         </nav>
       </div>
@@ -128,7 +130,7 @@ export function Navbar() {
                 <span className={`ticker-change ${product.direction}`}>{directionLabel(product)}</span>
               </Link>
             ))}
-          </div> : <div className="ticker-static">🥬 বাজারদর প্রতিদিন পরিবর্তিত হয় • আজকের দাম দেখুন • সর্বশেষ তথ্য জানতে পণ্য নির্বাচন করুন</div>}
+          </div> : <div className="ticker-static">আজকের দাম দেখুন • সর্বশেষ তথ্য জানতে পণ্য নির্বাচন করুন</div>}
         </div>
       </div>
     </header>

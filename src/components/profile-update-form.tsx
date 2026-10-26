@@ -6,7 +6,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 
-export function ProfileUpdateForm({ initialName }: { initialName: string }) {
+export default function ProfileUpdateForm({ initialName }: { initialName: string }) {
   const router = useRouter();
   const [name, setName] = useState(initialName);
   const [saving, setSaving] = useState(false);

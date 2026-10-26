@@ -8,7 +8,7 @@ export function ProductDetail({ product }: { product: Product }) {
   return (
     <main className="container route-main product-detail-page">
       <div className="breadcrumbs"><Link href="/">হোম</Link><span>/</span><Link href={`/category/${product.categorySlug}`}>{product.category}</Link><span>/</span><span>{product.name}</span></div>
-      {product.isSampleData ? <div className="api-warning"><span>ⓘ</span> এটি নমুনা ডেটা—লাইভ বাজারদর নয়। API পুনরায় চালু হলে আসল তথ্য দেখা যাবে।</div> : null}
+      {product.isSampleData}
       <section className="detail-summary-card">
         <div className="detail-product-heading">
           <div className="detail-emoji">{product.emoji}</div>

@@ -9,7 +9,7 @@ interface CategoryPayload {
   data?: { category?: Category; products?: Product[] };
 }
 
-export function CategoryPageClient({ slug }: { slug: string }) {
+export  function CategoryPageClient({ slug }: { slug: string }) {
   const [category, setCategory] = useState<Category | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,8 +55,8 @@ export function CategoryPageClient({ slug }: { slug: string }) {
         <div className="category-title-wrap"><p className="section-eyebrow">ক্যাটাগরি অনুযায়ী বাজারদর</p><h1>{category?.name ?? "পণ্য ক্যাটাগরি"}</h1><p>{category?.description || "এই ক্যাটাগরির পণ্যগুলোর আজকের দাম ও দামের পরিবর্তন এক জায়গায় দেখুন।"}</p></div>
         <div className="category-product-count"><strong>{loading ? "…" : new Intl.NumberFormat("bn-BD").format(products.length)}</strong><span>টি পণ্য</span></div>
       </section>
-      <div className="list-toolbar"><div><h2>এই ক্যাটাগরির পণ্য</h2><p>দাম তুলনা করে আপনার প্রয়োজনীয় পণ্যটি বেছে নিন।</p></div><label className="sort-select-wrap"><span>সাজান:</span><select value={sort} onChange={(event) => setSort(event.target.value)} aria-label="পণ্যের দাম অনুযায়ী সাজান"><option value="default">ডিফল্ট</option><option value="low-high">দাম: কম থেকে বেশি</option><option value="high-low">দাম: বেশি থেকে কম</option></select><span className="sort-chevron">⌄</span></label></div>
-      {!loading && products.some((product) => product.isSampleData) ? <div className="api-warning"><span>ⓘ</span> লাইভ API পাওয়া যায়নি। নিচে নমুনা দাম দেখানো হচ্ছে।</div> : null}
+      <div className="list-toolbar"><div><h2>পণ্য</h2></div><label className="sort-select-wrap"><span>সাজান:</span><select value={sort} onChange={(event) => setSort(event.target.value)} aria-label="পণ্যের দাম অনুযায়ী সাজান"><option value="default">ডিফল্ট</option><option value="low-high">দাম: কম থেকে বেশি</option><option value="high-low">দাম: বেশি থেকে কম</option></select><span className="sort-chevron">⌄</span></label></div>
+      {!loading && products.some((product) => product.isSampleData) }
       <ProductGrid products={sortedProducts} loading={loading} skeletonCount={6} />
     </main>
   );
