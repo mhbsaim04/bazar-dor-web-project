@@ -12,7 +12,7 @@ const githubClientSecret = process.env.BETTER_AUTH_GITHUB_SECRET;
 
 export const auth = betterAuth({
   ...(mongoClient ? { database: mongodbAdapter(mongoClient.db('bazar-dor-auth-db')) } : {}),
-  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL,
+  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "https://bazar-dor-web-project.vercel.app/",
   secret: process.env.BETTER_AUTH_SECRET || (process.env.NODE_ENV === "development" ? "dev-only-change-this-secret-before-deploying-bazar-dor" : undefined),
   emailAndPassword: {
     enabled: true,
