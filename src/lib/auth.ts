@@ -3,10 +3,10 @@ import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { MongoClient } from "mongodb";
 
-const mongoUri = process.env.BETTER_AUTH_DB_URL;
+const mongoUri = process.env.MONGODB_URL;
 
 if (!mongoUri) {
-  throw new Error("BETTER_AUTH_DB_URL is not configured");
+  throw new Error("MONGODB_URL is not configured");
 }
 
 const mongoClient = new MongoClient(mongoUri);
